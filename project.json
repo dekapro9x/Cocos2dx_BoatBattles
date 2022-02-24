@@ -15,7 +15,9 @@
     "jsList" : [
         "src/resource.js",
         "src/configGame/index.js",
-        "src/BoatBattles/IntroGame.js",
-        "src/BoatBattles/StartPlayGame.js"
+        "src/BoatBattles/IntroStartGame.js",
+        "src/BoatBattles/StartPlayGame.js",
+        "src/BoatBattles/LoadingProcess.js",
+        "sound"
     ]
 }
