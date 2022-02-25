@@ -2,7 +2,7 @@ var IntroStartGameLayer = cc.Layer.extend({
     sprite: null,
     ctor: function () {
         this._super();
-        this.musicBackground();
+        this.startMusicBackground();
         this.playSound = true;
         this.soundClickMouse = false;
         var size = cc.winSize;
@@ -15,7 +15,7 @@ var IntroStartGameLayer = cc.Layer.extend({
             y: size.height / 2,
         });
         this.addChild(this.backgroundStartGame, 0);
-        // //Ảnh Intro Game:
+        //Ảnh Intro Game:
         this.boatBattlesStartGameImg = new cc.Sprite(res.BoatBattlesStartGame_jpg);
         this.boatBattlesStartGameImg.attr({
             x: size.width / 2,
@@ -24,8 +24,36 @@ var IntroStartGameLayer = cc.Layer.extend({
             scaleY: 0.5,
         });
         this.addChild(this.boatBattlesStartGameImg, 0);
-        const runBackGround = cc.moveBy(3, cc.p(0, - size.height / 2 + 150));
-        this.boatBattlesStartGameImg.runAction(runBackGround);
+        const actionsImgIntro = cc.moveBy(3, cc.p(0, - size.height / 2 + 150));
+        this.boatBattlesStartGameImg.runAction(actionsImgIntro);
+        //Ảnh tàu ngầm chạy:
+        this.warShip = new cc.Sprite(res.BoatBattlesStartGame_jpg);
+        this.warShip.attr({
+            x: -400,
+            y: 390,
+            scaleX: 0.5,
+            scaleY: 0.5,
+        });
+        this.addChild(this.warShip, 0);
+        const actionsWarShip1 = cc.moveBy(1, cc.p(size.width + 900, 0));
+        const actionsWarShip2 = cc.moveBy(1, cc.p(- size.width - 900, 0));
+        this.warShip.runAction(
+            cc.repeatForever(cc.sequence(actionsWarShip1, actionsWarShip2))
+        );
+        //Ảnh thuyền chạy:
+        this.submarine = new cc.Sprite(res.BoatBattlesStartGame_jpg);
+        this.submarine.attr({
+            x: size.width + 500,
+            y: 200,
+            scaleX: 0.5,
+            scaleY: 0.5,
+        });
+        this.addChild(this.submarine, 0);
+        const actionsSubmarine1 = cc.moveBy(1, cc.p(-size.width - 900, 0));
+        const actionsSubmarine2 = cc.moveBy(1, cc.p(size.width + 900, 0));
+        this.submarine.runAction(
+            cc.repeatForever(cc.sequence(actionsSubmarine1, actionsSubmarine2))
+        );
         //Nút start Game:
         this.btnStartGame = new ccui.Button();
         this.btnStartGame.loadTextures(res.BtnStartGame_png);
@@ -58,6 +86,7 @@ var IntroStartGameLayer = cc.Layer.extend({
         this.btnSoundClickMouse.addTouchEventListener(this.handleMusic, this);
         return true;
     },
+    //Nút start lựa chọn người chơi:
     startGame: function (sender, type) {
         switch (type) {
             case 0:
@@ -65,10 +94,11 @@ var IntroStartGameLayer = cc.Layer.extend({
             case 1:
                 break;
             case 2:
-                this.actionsChangeSceneLoadingProcessGame();
+                this.actionsChangeSceneChooseOpponent();
                 break;
         }
     },
+    //Nút xử lý âm nhạc:
     handleMusic: function (sender, type) {
         switch (type) {
             case 0:
@@ -76,9 +106,8 @@ var IntroStartGameLayer = cc.Layer.extend({
             case 1:
                 break;
             case 2:
-                console.log("This", this);
                 if (this.playSound) {
-                    cc.audioEngine.stopMusic();
+                    this.stopMusic();
                     this.playSound = false;
                 } else {
                     cc.audioEngine.playMusic(res.MusicBackgroundAppIntroStartGame_mp3);
@@ -87,14 +116,22 @@ var IntroStartGameLayer = cc.Layer.extend({
                 break;
         }
     },
-    handleSoundClickMouse : function(){
-        
+    //Nút xử lý âm thanh click chuột:
+    handleSoundClickMouse: function () {
+
     },
-    actionsChangeSceneLoadingProcessGame: function () {
-        cc.director.runScene(new LoadingProcessStartGameScene());
-    },
-    musicBackground: function () {
+    //Mở nhạc nền:
+    startMusicBackground: function () {
         cc.audioEngine.playMusic(res.MusicBackgroundAppIntroStartGame_mp3);
+    },
+    //Tắt nhạc nền:
+    stopMusic: function () {
+        cc.audioEngine.stopMusic();
+    },
+    //Chuyển cảnh lựa chọn người chơi cùng: 
+    actionsChangeSceneChooseOpponent: function () {
+        this.stopMusic();
+        cc.director.runScene(new ChooseOpponentScene());
     }
 });
 

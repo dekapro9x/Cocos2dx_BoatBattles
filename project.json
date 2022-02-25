@@ -18,6 +18,7 @@
         "src/BoatBattles/IntroStartGame.js",
         "src/BoatBattles/StartPlayGame.js",
         "src/BoatBattles/LoadingProcess.js",
-        "sound"
+        "sound",
+        "src/BoatBattles/ChooseOpponent.js"
     ]
 }
